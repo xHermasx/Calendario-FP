@@ -1,359 +1,361 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Infografía Corporalidad</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    :root {
-      --bg-page: #f4f4f7;
-      --bg-card: #ffffff;
-      --ink-main: #111827;
-      --ink-muted: #4b5563;
-      --accent: #2563eb;
-      --accent-soft: #dbeafe;
-      --divider: #e5e7eb;
-      --radius-lg: 18px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FP Móvil - Universidad de Concepción</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --udec-blue: #003057;
+            --udec-orange: #F18A00;
+        }
+        .bg-udec-blue { background-color: var(--udec-blue); }
+        .text-udec-blue { color: var(--udec-blue); }
+        .bg-udec-orange { background-color: var(--udec-orange); }
+        .text-udec-orange { color: var(--udec-orange); }
+        .border-udec-orange { border-color: var(--udec-orange); }
+        
+        body {
+            background-color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+        .safe-area-bottom {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
 
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg-page);
-      color: var(--ink-main);
-      display: flex;
-      justify-content: center;
-      padding: 24px 12px;
-    }
+        .nav-active {
+            color: var(--udec-orange);
+            border-top: 2px solid var(--udec-orange);
+            background: rgba(241, 138, 0, 0.05);
+        }
 
-    .infografia-corporalidad {
-      background: var(--bg-card);
-      max-width: 820px;          /* vertical pero cómodo de leer */
-      width: 100%;
-      border-radius: var(--radius-lg);
-      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.16);
-      padding: 28px 22px 30px;
-      border: 1px solid #e5e7eb;
-    }
+        .event-card {
+            transition: transform 0.1s active;
+        }
 
-    @media (min-width: 768px) {
-      .infografia-corporalidad {
-        padding: 36px 40px 40px;
-      }
-    }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    .infografia-header {
-      text-align: center;
-      margin-bottom: 22px;
-    }
-
-    .infografia-tag {
-      display: inline-block;
-      font-size: 0.72rem;
-      letter-spacing: 0.11em;
-      text-transform: uppercase;
-      color: var(--accent);
-      background: var(--accent-soft);
-      padding: 4px 10px;
-      border-radius: 999px;
-      margin-bottom: 8px;
-      font-weight: 600;
-    }
-
-    .infografia-title {
-      font-size: clamp(1.7rem, 3vw, 2.1rem);
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-
-    .infografia-subtitle {
-      font-size: 0.93rem;
-      color: var(--ink-muted);
-      max-width: 520px;
-      margin: 0 auto;
-    }
-
-    .bloques-wrapper {
-      margin-top: 18px;
-      border-top: 1px solid var(--divider);
-      padding-top: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .bloque {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr);
-      row-gap: 6px;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid #e5e7eb;
-      background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .bloque::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      border: 2px solid transparent;
-      background: linear-gradient(135deg, rgba(37, 99, 235, 0.18), transparent) border-box;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.18s ease-out;
-    }
-
-    .bloque:hover::before {
-      opacity: 1;
-    }
-
-    .bloque-header {
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-      margin-bottom: 4px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .bloque-numero {
-      font-size: 0.85rem;
-      font-weight: 800;
-      color: var(--accent);
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      flex-shrink: 0;
-    }
-
-    .bloque-titulo {
-      font-size: 1rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .bloque-texto {
-      font-size: 0.9rem;
-      color: var(--ink-muted);
-      line-height: 1.45;
-      position: relative;
-      z-index: 1;
-    }
-
-    .bloque-texto strong {
-      color: #111827;
-      font-weight: 700;
-    }
-
-    .bloque-lista {
-      margin-top: 2px;
-      padding-left: 1.1rem;
-      display: grid;
-      gap: 1px;
-    }
-
-    .bloque-lista li {
-      margin: 1px 0;
-    }
-
-    .bloque-columns {
-      display: grid;
-      grid-template-columns: repeat(1, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 6px;
-    }
-
-    @media (min-width: 640px) {
-      .bloque-columns {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    .column-title {
-      font-size: 0.88rem;
-      font-weight: 700;
-      margin-bottom: 2px;
-      color: #111827;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .infografia-footer {
-      margin-top: 22px;
-      padding-top: 14px;
-      border-top: 1px dashed var(--divider);
-      text-align: center;
-      font-size: 0.78rem;
-      color: var(--ink-muted);
-    }
-  </style>
+        @keyframes pulse-orange {
+            0% { box-shadow: 0 0 0 0 rgba(241, 138, 0, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(241, 138, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(241, 138, 0, 0); }
+        }
+        .calendar-focus {
+            animation: pulse-orange 2s infinite;
+            background-color: var(--udec-orange) !important;
+            color: white !important;
+        }
+    </style>
 </head>
-<body>
-  <article class="infografia-corporalidad">
-    <header class="infografia-header">
-      <div class="infografia-tag">Guía para la muestra</div>
-      <h1 class="infografia-title">Corporalidad para la muestra</h1>
-      <p class="infografia-subtitle">
-        Puntos de corporalidad que debe incluir la muestra: elementos mínimos que deben aparecer
-        en la acción física del grupo.
-      </p>
-    </header>
+<body class="font-sans antialiased text-gray-900 select-none">
 
-    <section class="bloques-wrapper">
-
-      <!-- 1. NIVELES -->
-      <section class="bloque">
-        <div class="bloque-header">
-          <span class="bloque-numero">01</span>
-          <h2 class="bloque-titulo">Niveles del cuerpo</h2>
-        </div>
-        <div class="bloque-texto">
-          Los cuerpos deben usar los tres niveles:
-          <ul class="bloque-lista">
-            <li><strong>Nivel bajo →</strong> suelo (arrastrarse, gatear, caer, colapsar).</li>
-            <li><strong>Nivel medio →</strong> agachado, semi-incorporado.</li>
-            <li><strong>Nivel alto →</strong> de pie, estirado.</li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- 2. TRAYECTORIAS -->
-      <section class="bloque">
-        <div class="bloque-header">
-          <span class="bloque-numero">02</span>
-          <h2 class="bloque-titulo">Trayectorias</h2>
-        </div>
-        <div class="bloque-texto">
-          Los desplazamientos deben incluir:
-          <ul class="bloque-lista">
-            <li>Rectas</li>
-            <li>Diagonales</li>
-            <li>Curvas</li>
-            <li>Cambios repentinos de dirección</li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- 3. ENERGÍAS -->
-      <section class="bloque">
-        <div class="bloque-header">
-          <span class="bloque-numero">03</span>
-          <h2 class="bloque-titulo">Energías</h2>
-        </div>
-        <div class="bloque-texto">
-          Acciones físicas asociadas a intención:
-          <ul class="bloque-lista">
-            <li><strong>Aplastar / Comprimir:</strong> llevar hacia adentro, contraer, cerrar.</li>
-            <li><strong>Tirar:</strong> llevar hacia uno.</li>
-            <li><strong>Empujar:</strong> sacar, extender hacia afuera.</li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- 4. INTERIOR Y PERIFÉRICO -->
-      <section class="bloque">
-        <div class="bloque-header">
-          <span class="bloque-numero">04</span>
-          <h2 class="bloque-titulo">Interior y periférico</h2>
-        </div>
-        <div class="bloque-texto">
-          Dimensión espacial del cuerpo:
-          <div class="bloque-columns">
-            <div>
-              <div class="column-title">Interior</div>
-              <ul class="bloque-lista">
-                <li>Hacerse pequeño</li>
-                <li>Encogerse</li>
-                <li>Abrazarse a sí mismo</li>
-                <li>Brazos pegados al cuerpo</li>
-                <li>Protección, cierre, contracción</li>
-              </ul>
+    <div class="flex flex-col h-screen md:flex-row overflow-hidden">
+        
+        <!-- Sidebar PC -->
+        <aside class="hidden md:flex w-64 bg-udec-blue text-white flex-col p-6 shadow-2xl z-20">
+            <div class="mb-10 text-center">
+                <div class="bg-white p-2 rounded-xl mb-4 inline-block shadow-lg">
+                    <div class="w-10 h-10 bg-udec-blue flex items-center justify-center font-black text-xl rounded-lg">U</div>
+                </div>
+                <h1 class="text-xl font-black leading-tight tracking-tight uppercase">Planificación<br><span class="text-udec-orange">FP 2026</span></h1>
             </div>
-            <div>
-              <div class="column-title">Periférico</div>
-              <ul class="bloque-lista">
-                <li>Abrirse completamente</li>
-                <li>Brazos extendidos</li>
-                <li>Pecho expandido</li>
-                <li>Cuerpo proyectado hacia afuera</li>
-                <li>Expansión y ocupación del espacio</li>
-              </ul>
+
+            <nav class="space-y-2 flex-1">
+                <button onclick="changeView('all', this)" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/10 transition font-bold text-xs uppercase tracking-widest bg-white/5 border-l-4 border-udec-orange text-udec-orange">
+                    Vista General
+                </button>
+                <button onclick="changeView('reunion', this)" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/10 transition font-bold text-xs uppercase tracking-widest text-blue-200">
+                    Reuniones
+                </button>
+                <button onclick="changeView('birthday', this)" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/10 transition font-bold text-xs uppercase tracking-widest text-blue-200">
+                    Cumpleaños
+                </button>
+                <button onclick="changeView('event', this)" class="nav-btn w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/10 transition font-bold text-xs uppercase tracking-widest text-blue-200">
+                    Hitos
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col relative overflow-hidden">
+            
+            <!-- Header Móvil Reducido -->
+            <header class="md:hidden bg-udec-blue text-white p-3 pt-8 flex justify-between items-center shadow-lg">
+                <div class="pl-2">
+                    <h2 id="mobileTitle" class="text-lg font-black uppercase tracking-tighter">Vista General</h2>
+                    <p id="liveDate" class="text-[9px] text-blue-300 font-bold uppercase"></p>
+                </div>
+                <div class="w-8 h-8 rounded-full border border-udec-orange bg-udec-orange/20 flex items-center justify-center font-bold text-[10px]">FP</div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 no-scrollbar pb-32 md:pb-8">
+                
+                <!-- Mini Calendar -->
+                <div class="bg-white rounded-3xl p-4 shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-4 px-2">
+                        <button onclick="changeMiniMonth(-1)" class="p-1 text-udec-blue">◀</button>
+                        <h3 id="miniMonthTitle" class="font-black text-udec-blue uppercase text-[10px] tracking-widest">Marzo 2026</h3>
+                        <button onclick="changeMiniMonth(1)" class="p-1 text-udec-blue">▶</button>
+                    </div>
+                    <div id="miniCalendar" class="grid grid-cols-7 gap-1 text-center text-[9px] font-bold">
+                        <!-- JS content -->
+                    </div>
+                </div>
+
+                <!-- Hoy / Próximo Highlight -->
+                <div id="highlightEvent" class="bg-udec-orange rounded-3xl p-5 text-white shadow-xl shadow-orange-500/10 relative overflow-hidden">
+                    <div class="relative z-10">
+                        <span id="highLabel" class="text-[9px] font-black bg-white/20 px-2 py-1 rounded-full uppercase tracking-widest">Hoy</span>
+                        <h3 id="highTitle" class="text-xl font-black mt-2 leading-tight">--</h3>
+                        <p id="highDate" class="text-xs font-bold opacity-90 mt-1">--</p>
+                    </div>
+                    <svg class="absolute -right-4 -bottom-4 w-24 h-24 text-white/10 rotate-12" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"></path></svg>
+                </div>
+
+                <!-- Event Feed -->
+                <div class="space-y-4">
+                    <div class="flex justify-between items-end px-2">
+                        <h3 class="text-[10px] font-black text-udec-blue uppercase tracking-widest">Agenda</h3>
+                        <span id="eventCount" class="text-[9px] font-bold text-gray-400">--</span>
+                    </div>
+                    <div id="eventList" class="space-y-3">
+                        <!-- JS content -->
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </section>
 
-      <!-- 5. VELOCIDAD -->
-      <section class="bloque">
-        <div class="bloque-header">
-          <span class="bloque-numero">05</span>
-          <h2 class="bloque-titulo">Velocidad</h2>
-        </div>
-        <div class="bloque-texto">
-          Debe haber variaciones claras:
-          <ul class="bloque-lista">
-            <li>Muy lento</li>
-            <li>Lento</li>
-            <li>Medio</li>
-            <li>Rápido</li>
-            <li>Muy rápido / explosivo</li>
-          </ul>
-          Y transiciones naturales y súbitas entre cada una.
-        </div>
-      </section>
+            <!-- Bottom Navigation Móvil -->
+            <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 safe-area-bottom flex justify-around items-center z-50 shadow-2xl">
+                <button onclick="changeView('all', this)" class="nav-tab flex flex-col items-center py-2 px-3 text-gray-400 nav-active">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    <span class="text-[8px] font-bold mt-1 uppercase">Todos</span>
+                </button>
+                <button onclick="changeView('reunion', this)" class="nav-tab flex flex-col items-center py-2 px-3 text-gray-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 005.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    <span class="text-[8px] font-bold mt-1 uppercase">Reuniones</span>
+                </button>
+                <button onclick="changeView('birthday', this)" class="nav-tab flex flex-col items-center py-2 px-3 text-gray-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.703 2.703 0 01-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 01-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18z"></path></svg>
+                    <span class="text-[8px] font-bold mt-1 uppercase">Cumpleaños</span>
+                </button>
+                <button onclick="changeView('event', this)" class="nav-tab flex flex-col items-center py-2 px-3 text-gray-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span class="text-[8px] font-bold mt-1 uppercase">Hitos</span>
+                </button>
+            </nav>
+        </main>
+    </div>
 
-      <!-- 6. COMPASES Y TIEMPOS -->
-      <section class="bloque">
-        <div class="bloque-header">
-          <span class="bloque-numero">06</span>
-          <h2 class="bloque-titulo">Compases y tiempos</h2>
-        </div>
-        <div class="bloque-texto">
-          El cuerpo debe responder a:
-          <ul class="bloque-lista">
-            <li>Ritmos marcados (1–2–3–4 / 1–2–3…)</li>
-            <li>Tiempos definidos</li>
-            <li>Momentos de sincronización grupal</li>
-            <li>Momentos de total descoordinación</li>
-          </ul>
-        </div>
-      </section>
+    <script>
+        const events = [
+            { date: '2026-03-11', title: 'Cumpleaños: Alejandra, Daniela, Paola', time: '09:00 - 10:00', loc: 'Sala FP', type: 'birthday', desc: 'Desayuno especial de equipo' },
+            { date: '2026-03-13', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-03-27', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-04-10', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-04-24', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-05-06', title: 'Aniversario Casa de Estudios', time: '12:30 - 15:30', loc: 'Por confirmar', type: 'event', desc: 'Almuerzo aniversario institucional' },
+            { date: '2026-05-08', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-05-29', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-06-12', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-06-15', title: 'Cumpleaños: Valeria', time: '09:00 - 10:00', loc: 'Sala FP', type: 'birthday', desc: 'Desayuno especial' },
+            { date: '2026-06-26', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-07-10', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-07-24', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-07-29', title: 'Bienvenida 2º Semestre', time: '12:30 - 15:30', loc: 'Por confirmar', type: 'event', desc: 'Almuerzo bienvenida académica' },
+            { date: '2026-08-07', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-08-20', title: 'Cumpleaños: Ignelia', time: '09:00 - 10:00', loc: 'Sala FP', type: 'birthday', desc: 'Desayuno especial' },
+            { date: '2026-08-21', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-09-04', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-09-11', title: 'Fiestas Patrias', time: '12:30 - 15:30', loc: 'Por confirmar', type: 'event', desc: 'Almuerzo celebración Fiestas Patrias' },
+            { date: '2026-09-14', title: 'Cumpleaños: Ruth, Esteban, Inés', time: '09:00 - 10:00', loc: 'Sala FP', type: 'birthday', desc: 'Desayuno equipo' },
+            { date: '2026-09-25', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-10-09', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-10-15', title: 'Cumpleaños: Lorena, Hermas', time: '09:00 - 10:00', loc: 'Sala FP', type: 'birthday', desc: 'Desayuno equipo' },
+            { date: '2026-10-23', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-11-06', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-11-20', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-12-02', title: 'Día de la Secretaria', time: '09:00 - 10:30', loc: 'Sala FP', type: 'event', desc: 'Desayuno especial reconocimiento' },
+            { date: '2026-12-04', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-12-11', title: 'Cumpleaños: Vanessa, Jeannette, Yessenia', time: '09:00 - 10:00', loc: 'Sala FP', type: 'birthday', desc: 'Desayuno especial' },
+            { date: '2026-12-18', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'reunion', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-12-23', title: 'Desayuno Navideño', time: '09:00 - 11:30', loc: 'Sala FP', type: 'event', desc: 'Cierre anual' },
+            { date: '2027-01-13', title: 'Cumpleaños: Romina, Nataly', time: '09:00 - 10:00', loc: 'Sala FP', type: 'birthday', desc: 'Desayuno equipo' }
+        ];
 
-      <!-- 7. RESPIRACIÓN COMO ACCIÓN -->
-      <section class="bloque">
-        <div class="bloque-header">
-          <span class="bloque-numero">07</span>
-          <h2 class="bloque-titulo">Respiración como acción</h2>
-        </div>
-        <div class="bloque-texto">
-          Debe estar claramente integrada:
-          <ul class="bloque-lista">
-            <li>Inhalaciones amplias</li>
-            <li>Exhalaciones marcadas</li>
-            <li>Respiración descoordinada</li>
-            <li>Respiración sincronizada</li>
-          </ul>
-        </div>
-      </section>
+        let miniYear = 2026;
+        let miniMonth = 2; 
+        let currentFilter = 'all';
 
-    </section>
+        function changeView(category, btn) {
+            currentFilter = category;
+            document.querySelectorAll('.nav-tab, .nav-btn').forEach(b => b.classList.remove('nav-active', 'bg-white/5', 'border-l-4', 'border-udec-orange', 'text-udec-orange'));
+            btn.classList.add('nav-active');
+            if(window.innerWidth >= 768) btn.classList.add('bg-white/5', 'border-l-4', 'border-udec-orange', 'text-udec-orange');
+            document.getElementById('mobileTitle').textContent = category === 'all' ? 'Vista General' : category.toUpperCase();
+            renderEvents();
+        }
 
-    <footer class="infografia-footer">
-      Elementos mínimos de corporalidad que deben aparecer en la muestra final.
-    </footer>
-  </article>
+        function createGCalLink(ev) {
+            const baseUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE";
+            const dateStr = ev.date.replace(/-/g, '');
+            let dates = `${dateStr}/${dateStr}`;
+            if(ev.time && ev.time.includes('-')) {
+                const times = ev.time.split('-').map(t => t.trim().replace(':', ''));
+                dates = `${dateStr}T${times[0]}00Z/${dateStr}T${times[1]}00Z`;
+            }
+            return `${baseUrl}&text=${encodeURIComponent(ev.title)}&dates=${dates}&details=${encodeURIComponent(ev.desc || '')}&location=${encodeURIComponent(ev.loc || '')}`;
+        }
+
+        function renderEvents() {
+            const list = document.getElementById('eventList');
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            let filtered = currentFilter === 'all' ? events : events.filter(e => e.type === currentFilter);
+            filtered.sort((a,b) => new Date(a.date) - new Date(b.date));
+
+            document.getElementById('eventCount').textContent = `${filtered.length} EVENTOS`;
+            list.innerHTML = '';
+
+            filtered.forEach(e => {
+                const evDate = new Date(e.date + "T00:00:00");
+                const isPast = evDate < today;
+                const card = document.createElement('div');
+                card.id = `event-${e.date}`;
+                card.className = `event-card bg-white p-4 rounded-3xl shadow-sm border border-gray-50 flex flex-col gap-3 transition-all ${isPast ? 'opacity-30 grayscale' : ''}`;
+                
+                card.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="bg-red-50 w-12 h-12 rounded-2xl flex flex-col items-center justify-center flex-shrink-0">
+                            <span class="text-[7px] font-black uppercase text-red-400">${evDate.toLocaleDateString('es-ES', {month:'short'})}</span>
+                            <span class="text-lg font-black text-red-700">${evDate.getDate()}</span>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-black text-gray-900 leading-tight text-sm">${e.title}</h4>
+                            <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">${e.time || 'Todo el día'} • ${e.loc}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <a href="${createGCalLink(e)}" target="_blank" class="flex-1 bg-udec-blue text-white py-2.5 rounded-2xl text-[9px] font-black uppercase tracking-widest text-center transition flex items-center justify-center gap-2">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"></path></svg>
+                            Agendar
+                        </a>
+                        <button onclick="locateOnCalendar('${e.date}')" class="w-10 bg-gray-50 text-gray-400 rounded-2xl flex items-center justify-center border border-gray-100 hover:text-udec-orange">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+
+            updateHighlight(today);
+        }
+
+        function updateHighlight(today) {
+            const todayStr = today.toISOString().split('T')[0];
+            const eventToday = events.find(e => e.date === todayStr);
+            const highLabel = document.getElementById('highLabel');
+            const highTitle = document.getElementById('highTitle');
+            const highDate = document.getElementById('highDate');
+
+            if(eventToday) {
+                highLabel.textContent = "Evento de Hoy";
+                highLabel.className = "text-[9px] font-black bg-white/40 px-2 py-1 rounded-full uppercase tracking-widest";
+                highTitle.textContent = eventToday.title;
+                highDate.textContent = `📍 ${eventToday.loc} • ${eventToday.time}`;
+            } else {
+                const next = events.filter(e => new Date(e.date + "T00:00:00") >= today).sort((a,b) => new Date(a.date) - new Date(b.date))[0];
+                highLabel.textContent = "Hoy: Sin eventos";
+                highLabel.className = "text-[9px] font-black bg-black/10 px-2 py-1 rounded-full uppercase tracking-widest";
+                if(next) {
+                    highTitle.textContent = `Próximo: ${next.title}`;
+                    highDate.textContent = `${new Date(next.date + "T00:00:00").toLocaleDateString('es-ES', {weekday: 'long', day:'numeric', month:'long'})}`;
+                }
+            }
+        }
+
+        function locateOnCalendar(dateStr) {
+            const d = new Date(dateStr + "T00:00:00");
+            miniMonth = d.getMonth();
+            miniYear = d.getFullYear();
+            renderMiniCalendar();
+            
+            // Efecto visual en el calendario
+            setTimeout(() => {
+                const dayEl = document.querySelector(`.day-${dateStr}`);
+                if(dayEl) {
+                    dayEl.classList.add('calendar-focus');
+                    setTimeout(() => dayEl.classList.remove('calendar-focus'), 3000);
+                }
+            }, 100);
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderMiniCalendar() {
+            const container = document.getElementById('miniCalendar');
+            const title = document.getElementById('miniMonthTitle');
+            const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+            
+            container.innerHTML = '';
+            title.textContent = `${months[miniMonth]} ${miniYear}`;
+
+            ['L', 'M', 'M', 'J', 'V', 'S', 'D'].forEach(d => {
+                const dayEl = document.createElement('div');
+                dayEl.className = "text-gray-300 pb-2";
+                dayEl.textContent = d;
+                container.appendChild(dayEl);
+            });
+
+            const firstDay = (new Date(miniYear, miniMonth, 1).getDay() + 6) % 7;
+            const daysInMonth = new Date(miniYear, miniMonth + 1, 0).getDate();
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+
+            for(let i=0; i<firstDay; i++) container.appendChild(document.createElement('div'));
+
+            for(let i=1; i<=daysInMonth; i++) {
+                const dStr = `${miniYear}-${String(miniMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                const evs = events.filter(e => e.date === dStr);
+                const isToday = dStr === todayStr;
+                
+                const d = document.createElement('div');
+                d.className = `day-${dStr} h-7 flex items-center justify-center rounded-xl cursor-pointer transition-all active:scale-75 ${evs.length > 0 ? 'bg-udec-blue text-white' : 'text-gray-400'} ${isToday ? 'ring-1 ring-udec-orange font-black' : ''}`;
+                d.textContent = i;
+                
+                if(evs.length > 0) {
+                    d.onclick = () => {
+                        currentFilter = 'all';
+                        const btns = document.querySelectorAll('.nav-tab, .nav-btn');
+                        changeView('all', btns[0]);
+                        
+                        setTimeout(() => {
+                            const target = document.getElementById(`event-${dStr}`);
+                            if(target) target.scrollIntoView({behavior: 'smooth', block: 'center'});
+                        }, 200);
+                    };
+                }
+                container.appendChild(d);
+            }
+        }
+
+        function changeMiniMonth(delta) {
+            miniMonth += delta;
+            if(miniMonth > 11) { miniMonth = 0; miniYear++; }
+            if(miniMonth < 0) { miniMonth = 11; miniYear--; }
+            renderMiniCalendar();
+        }
+
+        setInterval(() => {
+            document.getElementById('liveDate').textContent = new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+        }, 1000);
+
+        renderEvents();
+        renderMiniCalendar();
+    </script>
 </body>
 </html>
