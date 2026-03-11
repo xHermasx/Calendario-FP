@@ -42,7 +42,6 @@
             box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1);
         }
 
-        /* Estado Seleccionado Naranja */
         .event-selected {
             border-color: var(--udec-orange) !important;
             background-color: #fffaf0 !important;
@@ -78,11 +77,20 @@
             color: white !important;
             transform: scale(1.15);
         }
+
+        .countdown-item {
+            background: rgba(0, 48, 87, 0.05);
+            border-radius: 0.75rem;
+            padding: 0.5rem 0.25rem;
+            flex: 1;
+            min-width: 0; 
+            text-align: center;
+        }
     </style>
 </head>
 <body class="font-sans antialiased text-gray-900 select-none">
 
-    <div class="flex flex-col h-screen md:flex-row overflow-hidden">
+    <div class="flex h-screen overflow-hidden flex-col md:flex-row">
         
         <!-- Sidebar Escritorio -->
         <aside class="hidden md:flex w-80 bg-udec-blue text-white flex-col p-8 shadow-2xl z-30">
@@ -95,10 +103,10 @@
             </div>
 
             <nav class="space-y-3 flex-1">
-                <button id="nav-todo" onclick="changeView('all', this)" class="nav-btn w-full flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/5 transition-all font-bold text-xs uppercase tracking-widest nav-active">
+                <button id="nav-todo" onclick="changeView('all', this)" class="nav-btn w-full flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/5 transition-all font-bold text-xs uppercase tracking-widest nav-active text-udec-orange">
                     Vista General
                 </button>
-                <button id="nav-reunion" onclick="changeView('REUNIÓN', this)" class="nav-btn w-full flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/5 transition-all font-bold text-xs uppercase tracking-widest text-blue-100/70">
+                <button id="nav-reunion" onclick="changeView('REUNIONES', this)" class="nav-btn w-full flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/5 transition-all font-bold text-xs uppercase tracking-widest text-blue-100/70">
                     Reuniones
                 </button>
                 <button id="nav-cumple" onclick="changeView('CUMPLEAÑOS', this)" class="nav-btn w-full flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/5 transition-all font-bold text-xs uppercase tracking-widest text-blue-100/70">
@@ -123,7 +131,7 @@
         <!-- Contenido Principal -->
         <main class="flex-1 flex flex-col relative overflow-hidden">
             
-            <!-- Header Móvil Reducido -->
+            <!-- Header Móvil -->
             <header class="md:hidden bg-udec-blue text-white p-3 pt-8 flex justify-between items-center shadow-lg">
                 <div class="pl-2">
                     <h2 id="mobileTitle" class="text-sm font-black uppercase tracking-tight">Vista General</h2>
@@ -136,10 +144,10 @@
                 
                 <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
                     
-                    <!-- Columna Izquierda: Calendario y Resumen -->
+                    <!-- Columna Izquierda -->
                     <div class="lg:col-span-4 space-y-6">
                         
-                        <!-- Evento de Hoy -->
+                        <!-- Evento de Hoy / Highlight -->
                         <div id="highlightEvent" class="bg-udec-orange rounded-[2rem] p-6 text-white shadow-2xl shadow-orange-500/20 relative overflow-hidden group transition-all hover:scale-[1.02]">
                             <div class="relative z-10">
                                 <span id="labelHito" class="text-[10px] font-black bg-white/20 px-3 py-1.5 rounded-full uppercase tracking-widest">Actividad de hoy</span>
@@ -149,7 +157,40 @@
                                     --
                                 </p>
                             </div>
-                            <svg class="absolute -right-6 -bottom-6 w-32 h-32 text-white/10 rotate-12 group-hover:rotate-45 transition-transform duration-700" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"></path></svg>
+                            <svg class="absolute -right-6 -bottom-6 w-32 h-32 text-white/10 rotate-12" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"></path></svg>
+                        </div>
+
+                        <!-- Contador Regresivo (Countdown) - ALINEACIÓN CORREGIDA -->
+                        <div id="countdownContainer" class="bg-white rounded-[2rem] p-6 shadow-xl border border-white hidden">
+                            <div class="flex gap-2 mb-4">
+                                <div class="mt-0.5">
+                                    <span class="flex h-2 w-2 rounded-full bg-red-500 animate-ping"></span>
+                                </div>
+                                <div>
+                                    <h4 class="text-[10px] font-black text-udec-blue uppercase tracking-widest leading-none mb-1">
+                                        Cuenta regresiva:
+                                    </h4>
+                                    <div id="countdownTarget" class="text-[11px] font-black text-udec-orange uppercase tracking-tight leading-tight">--</div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center gap-2 overflow-hidden">
+                                <div class="countdown-item">
+                                    <span id="cdDays" class="block text-lg md:text-xl font-black text-udec-blue leading-none">00</span>
+                                    <span class="text-[7px] uppercase font-bold text-gray-400">Días</span>
+                                </div>
+                                <div class="countdown-item">
+                                    <span id="cdHours" class="block text-lg md:text-xl font-black text-udec-blue leading-none">00</span>
+                                    <span class="text-[7px] uppercase font-bold text-gray-400">Hrs</span>
+                                </div>
+                                <div class="countdown-item">
+                                    <span id="cdMins" class="block text-lg md:text-xl font-black text-udec-blue leading-none">00</span>
+                                    <span class="text-[7px] uppercase font-bold text-gray-400">Min</span>
+                                </div>
+                                <div class="countdown-item">
+                                    <span id="cdSecs" class="block text-lg md:text-xl font-black text-udec-blue text-udec-orange leading-none">00</span>
+                                    <span class="text-[7px] uppercase font-bold text-gray-400">Seg</span>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Calendario Reducido -->
@@ -159,12 +200,10 @@
                                 <h3 id="miniMonthTitle" class="font-black text-udec-blue uppercase text-[11px] tracking-widest">Marzo 2026</h3>
                                 <button onclick="changeMiniMonth(1)" class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-full transition text-udec-blue">▶</button>
                             </div>
-                            <div id="miniCalendar" class="grid grid-cols-7 gap-2 text-center text-[10px] font-bold">
-                                <!-- Inyectado por JS -->
-                            </div>
+                            <div id="miniCalendar" class="grid grid-cols-7 gap-2 text-center text-[10px] font-bold"></div>
                         </div>
 
-                        <!-- Info de Leyenda -->
+                        <!-- Lugares -->
                         <div class="hidden lg:block bg-white/50 backdrop-blur-sm rounded-[2rem] p-6 border border-white">
                             <h4 class="text-[11px] font-black text-udec-blue uppercase tracking-widest mb-4 italic">Lugares para las actividades</h4>
                             <div class="space-y-4">
@@ -174,44 +213,41 @@
                                 </div>
                                 <div class="flex items-center gap-4">
                                     <div class="w-3 h-3 rounded-full bg-udec-orange shadow-md shadow-orange-500/40"></div>
-                                    <p class="text-[10px] font-bold text-gray-600">Cumpleaños y Hitos / Sala FP</p>
+                                    <p class="text-[10px] font-bold text-gray-600">Cumpleaños e Hitos / Sala FP</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Columna Derecha: Agenda -->
+                    <!-- Columna Derecha -->
                     <div class="lg:col-span-8 space-y-6">
                         <div class="flex justify-between items-center mb-2 px-2">
                             <h3 class="text-xs font-black text-udec-blue uppercase tracking-[0.2em]">Agenda del Período</h3>
                             <span id="conteoActividades" class="text-[10px] font-black text-white bg-udec-blue px-3 py-1 rounded-full shadow-lg shadow-blue-900/20">--</span>
                         </div>
-                        
-                        <div id="listaActividades" class="space-y-4">
-                            <!-- Inyectado por JS -->
-                        </div>
+                        <div id="listaActividades" class="space-y-4"></div>
                     </div>
 
                 </div>
             </div>
 
-            <!-- Bottom Nav Móvil Restaurado con Identificadores en Español -->
+            <!-- Bottom Nav -->
             <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-100 flex justify-around items-center z-50 shadow-2xl py-3 px-1">
                 <button onclick="changeView('all', this)" class="nav-tab flex-1 flex flex-col items-center py-2 text-gray-400 nav-active">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                    <span class="text-[8px] font-black mt-1 uppercase">Todos</span>
+                    <span class="text-[8px] font-black mt-1 uppercase tracking-tighter">Todos</span>
                 </button>
-                <button onclick="changeView('REUNIÓN', this)" class="nav-tab flex-1 flex flex-col items-center py-2 text-gray-400">
+                <button onclick="changeView('REUNIONES', this)" class="nav-tab flex-1 flex flex-col items-center py-2 text-gray-400">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                    <span class="text-[8px] font-black mt-1 uppercase">Reuniones</span>
+                    <span class="text-[8px] font-black mt-1 uppercase tracking-tighter">Reuniones</span>
                 </button>
                 <button onclick="changeView('CUMPLEAÑOS', this)" class="nav-tab flex-1 flex flex-col items-center py-2 text-gray-400">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.703 2.703 0 01-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 01-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18z"></path></svg>
-                    <span class="text-[8px] font-black mt-1 uppercase">Cumpleaños</span>
+                    <span class="text-[8px] font-black mt-1 uppercase tracking-tighter">Cumples</span>
                 </button>
                 <button onclick="changeView('HITOS', this)" class="nav-tab flex-1 flex flex-col items-center py-2 text-gray-400">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-7.714 2.143L11 21l-2.286-6.857L1 12l7.714-2.143L11 3z"></path></svg>
-                    <span class="text-[8px] font-black mt-1 uppercase">Hitos</span>
+                    <span class="text-[8px] font-black mt-1 uppercase tracking-tighter">Hitos</span>
                 </button>
             </nav>
         </main>
@@ -220,35 +256,35 @@
     <script>
         const events = [
             { date: '2026-03-11', title: 'Cumpleaños: Alejandra, Daniela, Paola', time: '09:00 - 10:00', loc: 'Sala FP', type: 'CUMPLEAÑOS', desc: 'Desayuno especial de equipo' },
-            { date: '2026-03-13', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
-            { date: '2026-03-27', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
-            { date: '2026-04-10', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
-            { date: '2026-04-24', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-03-13', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-03-27', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-04-10', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-04-24', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
             { date: '2026-05-06', title: 'Aniversario Casa de Estudios', time: '12:30 - 15:30', loc: 'Por confirmar', type: 'HITOS', desc: 'Almuerzo aniversario institucional' },
-            { date: '2026-05-08', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
-            { date: '2026-05-29', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
-            { date: '2026-06-12', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-05-08', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-05-29', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-06-12', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
             { date: '2026-06-15', title: 'Cumpleaños: Valeria', time: '09:00 - 10:00', loc: 'Sala FP', type: 'CUMPLEAÑOS', desc: 'Desayuno especial' },
-            { date: '2026-06-26', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
-            { date: '2026-07-10', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
-            { date: '2026-07-24', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-06-26', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-07-10', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-07-24', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
             { date: '2026-07-29', title: 'Bienvenida 2º Semestre', time: '12:30 - 15:30', loc: 'Por confirmar', type: 'HITOS', desc: 'Almuerzo bienvenida académica' },
-            { date: '2026-08-07', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-08-07', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
             { date: '2026-08-20', title: 'Cumpleaños: Ignelia', time: '09:00 - 10:00', loc: 'Sala FP', type: 'CUMPLEAÑOS', desc: 'Desayuno especial' },
-            { date: '2026-08-21', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
-            { date: '2026-09-04', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-08-21', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-09-04', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
             { date: '2026-09-11', title: 'Fiestas Patrias', time: '12:30 - 15:30', loc: 'Por confirmar', type: 'HITOS', desc: 'Almuerzo celebración Fiestas Patrias' },
             { date: '2026-09-14', title: 'Cumpleaños: Ruth, Esteban, Inés', time: '09:00 - 10:00', loc: 'Sala FP', type: 'CUMPLEAÑOS', desc: 'Desayuno equipo' },
-            { date: '2026-09-25', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
-            { date: '2026-10-09', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-09-25', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-10-09', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
             { date: '2026-10-15', title: 'Cumpleaños: Lorena, Hermas', time: '09:00 - 10:00', loc: 'Sala FP', type: 'CUMPLEAÑOS', desc: 'Desayuno equipo' },
-            { date: '2026-10-23', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
-            { date: '2026-11-06', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
-            { date: '2026-11-20', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-10-23', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-11-06', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-11-20', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
             { date: '2026-12-02', title: 'Día de la Secretaría', time: '09:00 - 10:30', loc: 'Sala FP', type: 'HITOS', desc: 'Desayuno especial reconocimiento' },
-            { date: '2026-12-04', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-12-04', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
             { date: '2026-12-11', title: 'Cumpleaños: Vanessa, Jeannette, Yessenia', time: '09:00 - 10:00', loc: 'Sala FP', type: 'CUMPLEAÑOS', desc: 'Desayuno especial' },
-            { date: '2026-12-18', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIÓN', desc: 'Encargo Sra. Ruth Pérez' },
+            { date: '2026-12-18', title: 'Reunión Equipo FP', time: '09:00 - 11:00', loc: 'Sala DTI', type: 'REUNIONES', desc: 'Encargo Sra. Ruth Pérez' },
             { date: '2026-12-23', title: 'Desayuno Navideño', time: '09:00 - 11:30', loc: 'Sala FP', type: 'HITOS', desc: 'Cierre anual' },
             { date: '2027-01-13', title: 'Cumpleaños: Romina, Nataly', time: '09:00 - 10:00', loc: 'Sala FP', type: 'CUMPLEAÑOS', desc: 'Desayuno equipo' }
         ];
@@ -256,11 +292,13 @@
         let miniYear = 2026;
         let miniMonth = 2; 
         let currentFilter = 'all';
+        let countdownInterval;
 
         function changeView(category, btn) {
             currentFilter = category;
-            document.querySelectorAll('.nav-tab, .nav-btn').forEach(b => b.classList.remove('nav-active'));
+            document.querySelectorAll('.nav-tab, .nav-btn').forEach(b => b.classList.remove('nav-active', 'text-udec-orange'));
             btn.classList.add('nav-active');
+            if(window.innerWidth >= 768) btn.classList.add('text-udec-orange');
             document.getElementById('mobileTitle').textContent = category === 'all' ? 'Vista General' : category;
             renderEvents();
         }
@@ -321,6 +359,7 @@
             });
 
             updateHighlight(today);
+            initCountdown(today);
         }
 
         function updateHighlight(today) {
@@ -344,6 +383,57 @@
                     highDate.textContent = `${new Date(next.date + "T00:00:00").toLocaleDateString('es-ES', {weekday: 'long', day:'numeric', month:'long'})}`;
                 }
             }
+        }
+
+        function initCountdown(today) {
+            const proximoEvento = events
+                .filter(e => new Date(e.date + "T00:00:00") >= today)
+                .sort((a,b) => new Date(a.date) - new Date(b.date))[0];
+
+            const container = document.getElementById('countdownContainer');
+            if(!proximoEvento) {
+                container.classList.add('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            document.getElementById('countdownTarget').textContent = proximoEvento.title;
+
+            if(countdownInterval) clearInterval(countdownInterval);
+
+            let horaInicio = "09:00";
+            if(proximoEvento.time && proximoEvento.time.includes('-')) {
+                horaInicio = proximoEvento.time.split('-')[0].trim();
+            }
+            
+            const targetDate = new Date(`${proximoEvento.date}T${horaInicio}:00`).getTime();
+
+            const update = () => {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance < 0) {
+                    clearInterval(countdownInterval);
+                    const nextToday = new Date();
+                    nextToday.setDate(nextToday.getDate() + 1);
+                    nextToday.setHours(0,0,0,0);
+                    initCountdown(nextToday);
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('cdDays').textContent = String(days).padStart(2, '0');
+                document.getElementById('cdHours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('cdMins').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('cdSecs').textContent = String(seconds).padStart(2, '0');
+            };
+
+            update();
+            countdownInterval = setInterval(update, 1000);
         }
 
         function locateOnCalendar(dateStr) {
